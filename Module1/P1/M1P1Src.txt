@@ -1,0 +1,25 @@
+int baseTemp = 0;
+
+int currentTemp = 0;
+
+void setup()
+{
+  pinMode(A0, INPUT);
+  Serial.begin(9600);
+
+  pinMode(2, OUTPUT);
+}
+
+void loop()
+{
+  baseTemp = 40;
+  currentTemp = map(((analogRead(A0) - 20) * 3.04), 0, 1023, -40, 125);
+  Serial.print(currentTemp);
+  Serial.println("C");
+  if (currentTemp < baseTemp) {
+    digitalWrite(2, LOW);
+  } else {
+    digitalWrite(2, HIGH);
+  }
+  delay(3000); // Wait for 3000 millisecond(s)
+}
