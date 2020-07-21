@@ -1,0 +1,28 @@
+int ledPin = 4;
+int pushButtonPin = 2;
+
+void setup() {
+
+  Serial.begin(9600);
+  pinMode(pushButtonPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(pushButtonPin), toggleLED, FALLING);
+
+}
+
+void loop() {  
+  delay(1000);
+}
+
+void toggleLED()
+{
+  Serial.println("Button Interrupt");
+  if(digitalRead(ledPin) == HIGH)
+  {
+    digitalWrite(ledPin, LOW);
+  }
+  else
+  {
+    digitalWrite(ledPin, HIGH);
+  }
+}
