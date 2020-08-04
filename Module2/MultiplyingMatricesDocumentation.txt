@@ -91,17 +91,45 @@ MPI & OpenMP with 5 slaves:
 Results:
 
 Matrix size 15x15 no threading:   7500 Nanoseconds
-Matrix size 15x15 MPI & OpemMP: 933100 Nanoseconds
+Matrix size 15x15 MPI & OpenMP: 933100 Nanoseconds
 Difference: 124.4x 
 
 Small matrix multiplication is terrible due to the added tasks of simulating sending and receiving the matrix data to
 other nodes as well as attempting to multithread using OpenMP.
 
 Matrix size 200x200 no threading:  17721100 Nanoseconds
-Matrix size 200x200 MPI & OpemMP: 166638900 Nanoseconds
+Matrix size 200x200 MPI & OpenMP: 166638900 Nanoseconds
 Difference: 9.4x 
 
 Multiplying using MPI as well as OpenMP with a larger scale matrix of 200 x 200 was worse than with purely using MPI
 (tested multiple times). I beleive this is due to the fact that this was just a simulated example of using multiple 
 nodes on the same PC, as opposed to multiple PCs which would have more than a single CPU attempting to do all the 
 work.
+
+-----------------------------------------------------------------------
+
+MPI & OpenCL with 5 slaves:
+Results:
+
+Matrix size 15x15 no threading:    7500 Nanoseconds
+Matrix size 15x15 MPI & OpenCL: 1004700 Nanoseconds
+Difference: 133.96x 
+
+This was the worst example so far, not only does my PC now have to simulate 6 PCs, it also has to allocate and run
+the program 5 times using the GPU and all that entails. Let's see what a larger matrix is like.
+
+Matrix size 200x200 no threading:  17721100 Nanoseconds
+Matrix size 200x200 MPI & OpenCL:   1814600 Nanoseconds
+Difference: 0.102x 
+
+WOW! This is the best result yet, so much better that i had to run it multiple times, and i'll try it using an even 
+larger set of matrix multiplications. I'm unsure what makes it so much more efficient, as the 200x200 matrix time
+is close to the 15x15 time. 
+
+Matrix size 1000x1000 no threading:  2463404200 Nanoseconds
+Matrix size 1000x1000 MPI & OpenCL:    39674700 Nanoseconds
+Difference: 0.016x
+
+This result shows definitively that using MPI and OpenCL together are the best possible method so far. I could 
+only imagine how much better it would be using multiple PCs as slaves as opposed to using threads on a single
+CPU.
