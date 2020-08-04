@@ -53,3 +53,55 @@ Matrix size 200x200 OpenMP:       16842300 Nanoseconds
 Difference: 0.95x 
 
 Multiplying using openMP netted between 2% and 5% faster processing times over the sequential calculation times.
+
+
+-----------------------------------------------------------------------
+
+MPI with 3 slaves:
+Results:
+
+Matrix size 15x15 no threading: 7500 Nanoseconds
+Matrix size 15x15 MPI:        859700 Nanoseconds
+Difference: 114.6x
+
+Small matrix multiplication is terrible due to the added tasks of sending and receiving the matrix data to other nodes
+or processes in this case.
+
+Matrix size 200x200 no threading: 17721100 Nanoseconds
+Matrix size 200x200 MPI:         142913000 Nanoseconds
+Difference: 8.1x 
+
+Multiplying using MPI with larger scale matrix of 200 x 200 was significantly more efficient that the small matrix, but
+still proved to be less efficient than other methods of splitting multi-threading. I believe this is due to the fact that
+the program needs to send and receive data multiple times in order to finish the multiplication.
+
+MPI with 5 slaves:
+Results:
+
+Matrix size 200x200 no threading:   17721100 Nanoseconds
+Matrix size 200x200 MPI (5 slaves):116575000 Nanoseconds
+Difference: 6.6x 
+
+Increasing the number of slaves (threads) to 5 resulted in faster speeds, so would indicate that with enough seperate 
+slaves, and a big enough task that this method would be faster than no threading at all.
+
+-----------------------------------------------------------------------
+
+MPI & OpenMP with 5 slaves:
+Results:
+
+Matrix size 15x15 no threading:   7500 Nanoseconds
+Matrix size 15x15 MPI & OpemMP: 933100 Nanoseconds
+Difference: 124.4x 
+
+Small matrix multiplication is terrible due to the added tasks of simulating sending and receiving the matrix data to
+other nodes as well as attempting to multithread using OpenMP.
+
+Matrix size 200x200 no threading:  17721100 Nanoseconds
+Matrix size 200x200 MPI & OpemMP: 166638900 Nanoseconds
+Difference: 9.4x 
+
+Multiplying using MPI as well as OpenMP with a larger scale matrix of 200 x 200 was worse than with purely using MPI
+(tested multiple times). I beleive this is due to the fact that this was just a simulated example of using multiple 
+nodes on the same PC, as opposed to multiple PCs which would have more than a single CPU attempting to do all the 
+work.
