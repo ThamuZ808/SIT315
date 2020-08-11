@@ -1,0 +1,18 @@
+Quicksort:
+Results:
+
+Array size 30 Sequential: 5300 Nanoseconds
+Array size 30 OpenMP:     5100 Nanoseconds
+
+Using OpenMP with a small sample size of 30 seems to have made a tiny if not
+uncalculable difference.
+
+
+Array size 100000 sequential: 42453200 Nanoseconds
+Array size 100000 OpenMP:     44410800 Nanoseconds
+
+Even using a very large array size, it seems there is no noticeable speed
+up using OpenMP. This could be because the only computation occuring
+is comparing 2 ints which is extremely easy for modern CPUs.
+
+-----------------------------------------------------------------------
