@@ -1,0 +1,86 @@
+#include <PinChangeInterruptBoards.h>
+#include <YetAnotherPcInt.h>
+
+int Led1Pin = 4;
+int Led2Pin = 5;
+int Led3Pin = 6;
+int LedTimerPin = 12;
+
+int pushButton1Pin = 2;
+int pushButton2Pin = 3;
+int pushButton3Pin = 7;
+
+const uint16_t t1_load = 0;
+const uint16_t t1_comp = 31250;
+
+void setup() {
+
+  Serial.begin(115200);
+  pinMode(pushButton1Pin, INPUT_PULLUP);
+  pinMode(pushButton2Pin, INPUT_PULLUP);
+  pinMode(pushButton3Pin, INPUT_PULLUP);
+  pinMode(Led1Pin, OUTPUT);
+  pinMode(Led2Pin, OUTPUT);
+  pinMode(Led3Pin, OUTPUT);
+  pinMode(LedTimerPin, OUTPUT);
+  
+  PcInt::attachInterrupt(pushButton1Pin, toggleLED, "1", FALLING);
+  PcInt::attachInterrupt(pushButton2Pin, toggleLED, "2", FALLING);
+  PcInt::attachInterrupt(pushButton3Pin, toggleLED, "3", FALLING);
+  
+  // Timer done using level up your arduino youtube video
+  // Should toggle every 500ms
+  TCCR1A = 0;
+  TCCR1B != (1 << CS12);
+  TCCR1B &= ~(1 << CS11);
+  TCCR1B &= ~(1 << CS10);
+  TCNT1 = t1_load;
+  OCR1A = t1_comp;
+  TIMSK1 = (1 << OCIE1A);
+  sei();
+}
+
+void loop() {  
+  delay(1000);
+}
+
+void toggleLED(const char* ledNum)
+{
+  if(ledNum == "1")
+  {
+    Serial.println("Button 1 Interrupt");
+    if(digitalRead(Led1Pin) == HIGH)
+      digitalWrite(Led1Pin, LOW);
+    else
+      digitalWrite(Led1Pin, HIGH);
+  }
+  else if (ledNum == "2")
+  {
+    Serial.println("Button 2 Interrupt");
+    if(digitalRead(Led2Pin) == HIGH)
+      digitalWrite(Led2Pin, LOW);
+    else
+      digitalWrite(Led2Pin, HIGH);
+  }
+  else if (ledNum == "3")
+  {
+    Serial.println("Button 3 Interrupt");
+    if(digitalRead(Led3Pin) == HIGH)
+      digitalWrite(Led3Pin, LOW);
+    else
+      digitalWrite(Led3Pin, HIGH);
+  }
+}
+
+ISR(TIMER1_COMPA_vect){
+  TCNT1 = t1_load;
+  Serial.println("Timer Interrupt");
+  if(digitalRead(LedTimerPin) == HIGH)
+  {
+    digitalWrite(LedTimerPin, LOW);
+  }
+  else
+  {
+    digitalWrite(LedTimerPin, HIGH);
+  }
+}
