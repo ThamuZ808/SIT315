@@ -1,0 +1,45 @@
+int button1LedPin = 4;
+int button2LedPin = 5;
+int pushButton1Pin = 2;
+int pushButton2Pin = 3;
+
+void setup() {
+
+  Serial.begin(9600);
+  pinMode(pushButton1Pin, INPUT);
+  pinMode(pushButton2Pin, INPUT);
+  pinMode(button1LedPin, OUTPUT);
+  pinMode(button2LedPin, OUTPUT);
+  attachInterrupt(digitalPinToInterrupt(pushButton1Pin), toggleButton1LED, FALLING);
+  attachInterrupt(digitalPinToInterrupt(pushButton2Pin), toggleButton2LED, RISING);
+}
+
+void loop() {  
+  delay(1000);
+}
+
+void toggleButton1LED()
+{
+  Serial.println("Button 1 Interrupt");
+  if(digitalRead(button1LedPin) == HIGH)
+  {
+    digitalWrite(button1LedPin, LOW);
+  }
+  else
+  {
+    digitalWrite(button1LedPin, HIGH);
+  }
+}
+
+void toggleButton2LED()
+{
+  Serial.println("Button 2 Interrupt");
+  if(digitalRead(button2LedPin) == HIGH)
+  {
+    digitalWrite(button2LedPin, LOW);
+  }
+  else
+  {
+    digitalWrite(button2LedPin, HIGH);
+  }
+}
